@@ -104,7 +104,7 @@ let words = [
         hint: "Place containing collection of books"
     },
 ]
-console.log(words)
+
 
 
 const initTimer = maxTime => {
