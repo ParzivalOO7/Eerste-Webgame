@@ -1,4 +1,4 @@
-// maakt variabelen aan en wijst DOM-elementen toe aan deze variabelen met behulp van de document.querySelector-methode. 
+// maakt variabelen aan en wijst DOM-elementen toe aan deze variabelen met behulp van de document.querySelector-methode.
 const wordText = document.querySelector(".word"),
     hintText = document.querySelector(".hint span"),
     timeText = document.querySelector(".time b"),
@@ -6,8 +6,30 @@ const wordText = document.querySelector(".word"),
     refreshBtn = document.querySelector(".refresh-word"),
     checkBtn = document.querySelector(".check-word");
 
+let correctWord, timer, score = 0;
+const scoreEl = document.getElementById("score");
+const toast = document.getElementById("toast");
+const timeoutModal = document.getElementById("timeout-modal");
+const modalWord = document.getElementById("modal-word");
+const modalBtn = document.getElementById("modal-btn");
 
-let correctWord, timer;
+let toastTimer;
+const showToast = (msg, type) => {
+    clearTimeout(toastTimer);
+    toast.textContent = msg;
+    toast.className = `toast show ${type}`;
+    toastTimer = setTimeout(() => toast.className = "toast", 2000);
+};
+
+const showTimeoutModal = () => {
+    modalWord.textContent = correctWord.toUpperCase();
+    timeoutModal.classList.add("show");
+};
+
+modalBtn.addEventListener("click", () => {
+    timeoutModal.classList.remove("show");
+    initGame();
+});
 
 // initialiseert een array met objecten genaamd 'words'. Elk object in de array heeft twee eigenschappen: 'word' en 'hint'. 
 let words = [
@@ -114,8 +136,10 @@ const initTimer = maxTime => {
             maxTime--;
             return timeText.innerText = maxTime;
         }
-        alert(`Time off! ${correctWord.toUpperCase()} was the correct word`);
-        initGame();
+        score = 0;
+        scoreEl.innerText = score;
+        clearInterval(timer);
+        showTimeoutModal();
     }, 1000);
 }
 
@@ -139,29 +163,24 @@ const initGame = () => {
 initGame();
 
 
-// const checkWord = () => {
-//     let userWord = inputField.value.toLowerCase();
-//     if (!userWord) return alert("Please enter the word to check!");
-//     if (userWord !== correctWord) return alert(`Oops! ${userWord} is not a correct word`);
-//     alert(`Congrats! ${correctWord.toUpperCase()} is the correct word`);
-//     initGame();
-// }
-
 
 const checkWord = () => {
     let userWord = inputField.value.toLowerCase();
-    if (!userWord) return alert("Please enter the word to check!");
+    if (!userWord) return showToast("Type a word first!", "wrong");
     if (userWord !== correctWord) {
-        document.body.style.backgroundColor = "red"; // Change background to red
-        //return alert(`Oops! ${userWord} is not the correct word`);
+        score = 0;
+        scoreEl.innerText = score;
+        showToast(`Wrong! It was "${correctWord.toUpperCase()}"`, "wrong");
+    } else {
+        score++;
+        scoreEl.innerText = score;
+        showToast("Correct!", "correct");
     }
-    else {
-        document.body.style.backgroundColor = "green"; // Change background to green
-    }
-    //alert(`Congrats! ${correctWord.toUpperCase()} is the correct word`);
     initGame();
 }
 
-
 refreshBtn.addEventListener("click", initGame);
 checkBtn.addEventListener("click", checkWord);
+inputField.addEventListener("keydown", e => {
+    if (e.key === "Enter") checkWord();
+});
