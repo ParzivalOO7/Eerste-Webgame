@@ -2,7 +2,9 @@
 <html lang="en">
 
 <head>
-    <title>Word Scramble Game</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#11120f">
+    <title>Unjumble / Word Scramble</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -11,30 +13,75 @@
 
     <div id="timeout-modal" class="modal-overlay">
         <div class="modal">
-            <div class="modal-icon">⏰</div>
-            <h3>Time's Up!</h3>
-            <p>The correct word was</p>
-            <span id="modal-word"></span>
-            <button id="modal-btn">Play Again</button>
+            <div class="modal-signal">
+                <p class="eyebrow">Round 01 / Ended</p>
+                <div class="modal-icon" aria-hidden="true">00</div>
+                <p class="modal-signal-note">No time<br>remaining</p>
+            </div>
+            <div class="modal-result">
+                <p class="eyebrow">Round complete</p>
+                <h3>Time's up.</h3>
+                <p>The word in this round was</p>
+                <span id="modal-word"></span>
+                <button id="modal-btn">Play again <span aria-hidden="true">↗</span></button>
+            </div>
         </div>
     </div>
 
-    <div class="container">
-        <h2>Word Scramble</h2>
-        <div class="content">
-            <p class="word"></p>
-            <div class="details">
-                <p class="hint">Hint: <span></span></p>
-                <p class="time">Time Left: <span><b>30</b>s</span></p>
+    <div id="winner-modal" class="modal-overlay">
+        <div class="modal winner-modal">
+            <div class="modal-signal">
+                <p class="eyebrow">Run 01 / Complete</p>
+                <div class="modal-icon" aria-hidden="true">WIN</div>
+                <p id="winner-note" class="modal-signal-note">Every signal<br>decoded</p>
             </div>
-            <input type="text" spellcheck="false" placeholder="Enter a valid word">
-            <div class="buttons">
-                <button class="refresh-word">Refresh Word</button>
-                <button class="check-word">Check Word</button>
+            <div class="modal-result">
+                <p class="eyebrow">Final result</p>
+                <h3 id="winner-title">You cleared<br>the board.</h3>
+                <p>Words in this run</p>
+                <span id="winner-score" class="winner-score"></span>
+                <button id="winner-btn">New run <span aria-hidden="true">↗</span></button>
             </div>
         </div>
-        <div>score: <span id="score">0</span></div>
     </div>
+
+    <main class="container">
+        <header class="game-header">
+            <div class="brand-lockup">
+                <span class="brand-mark" aria-hidden="true">+</span>
+                <div>
+                    <p class="eyebrow">Daily brain sprint</p>
+                    <h1>Unjumble</h1>
+                </div>
+            </div>
+            <div class="round-label"><span class="pulse-dot"></span> live round</div>
+        </header>
+        <div class="content">
+            <div class="stage-label"><span>01</span> Decode the signal</div>
+            <p class="word"></p>
+            <div class="details">
+                <p class="hint"><span class="detail-label">Clue</span><span class="hint-copy"></span></p>
+                <p class="time"><span class="detail-label">Time left</span><span><b>30</b><small>s</small></span></p>
+            </div>
+            <label class="answer-label" for="answer">Your answer</label>
+            <div class="answer-row">
+                <input id="answer" type="text" spellcheck="false" autocomplete="off" placeholder="Type the word...">
+                <button class="check-word" type="button">Check <span aria-hidden="true">↗</span></button>
+            </div>
+            <div class="buttons">
+                <button class="refresh-word" type="button"><span aria-hidden="true">↻</span> New word</button>
+                <span class="enter-note">press <kbd>enter</kbd> to submit</span>
+            </div>
+        </div>
+        <footer class="score-bar">
+            <span class="score-caption">Current streak</span>
+            <strong id="score">0</strong>
+            <span class="score-unit">words</span>
+            <span class="score-rule"></span>
+            <span class="score-caption">Focus mode</span>
+            <span class="mode-chip">30 sec</span>
+        </footer>
+    </main>
     <script src="script.js"></script>
 </body>
 
